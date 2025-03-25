@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:fl_chart/fl_chart.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: MainScreen());
