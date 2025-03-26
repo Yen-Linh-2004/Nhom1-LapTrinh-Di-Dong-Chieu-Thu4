@@ -1,4 +1,5 @@
-import 'package:code_baocao/chitietthietbi.dart';
+
+import 'package:code_baocao/Users/chitietthietbi.dart';
 import 'package:flutter/material.dart';
 
 class EquipmentUserScreen extends StatefulWidget {

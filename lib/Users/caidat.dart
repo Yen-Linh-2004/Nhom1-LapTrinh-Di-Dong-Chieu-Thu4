@@ -1,6 +1,6 @@
 // ignore: file_names
-import 'package:code_baocao/DangNhap.dart';
 import 'package:code_baocao/Users/thongtincanhan.dart';
+import 'package:code_baocao/admin/DangNhap.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
