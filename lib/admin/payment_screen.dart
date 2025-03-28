@@ -1,114 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:code_baocao/admin/payment_info.dart';
-import 'bank_transfer_screen.dart'; // Import màn hình chuyển khoản
+import 'bank_transfer_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
+  final PaymentInfo paymentInfo;
+
+  PaymentScreen({required this.paymentInfo});
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  // Dữ liệu thanh toán mẫu
-  final PaymentInfo paymentInfo = PaymentInfo(
-    contractCode: 'HD001',
-    deviceName: 'Máy chủ HP Proliant Gen10',
-    deviceType: 'Thiết bị máy chủ',
-    renterName: 'Nguyễn Văn A',
-    amount: 1500000,
-  );
-  String _selectedPaymentMethod = ''; // Lưu trữ phương thức thanh toán đã chọn
-  bool _isPaid = false; // Trạng thái thanh toán
+  int _selectedIndex = 2; // Mặc định ở mục "Hóa đơn"
+  String _selectedPaymentMethod = '';
+  bool _isPaid = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Thanh Toán Thuê Thiết Bị'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              // Xử lý thông báo
-              _showNotificationDialog(context);
-            },
-          ),
-        ],
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  // Tạo AppBar
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text('Thanh Toán Hóa Đơn'),
+      backgroundColor: Colors.blue,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildContractInfo(),
-              SizedBox(height: 16),
-              _buildDeviceInfo(),
-              SizedBox(height: 16),
-              _buildAmountInfo(),
-              SizedBox(height: 16),
-              _buildPaymentButton(context),
-              SizedBox(height: 16),
-              _buildDueDate(), // Hiển thị ngày đến hạn
-              SizedBox(height: 24),
-              _buildPaymentMethods(),
-              if (_selectedPaymentMethod == 'Chuyển khoản') _buildBankTransferInfo(),
-            ],
-          ),
-        ),
+    );
+  }
+
+  // Tạo phần thân trang
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildContractInfo(),
+          SizedBox(height: 16),
+          _buildDeviceInfo(),
+          SizedBox(height: 16),
+          _buildAmountInfo(),
+          SizedBox(height: 16),
+          _buildPaymentMethods(),
+          if (_selectedPaymentMethod == 'Chuyển khoản') _buildBankTransferInfo(),
+          SizedBox(height: 16),
+          _buildPaymentButton(context),
+        ],
       ),
     );
   }
 
   Widget _buildContractInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Mã Hợp Đồng:', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(paymentInfo.contractCode),
-        ),
-        SizedBox(height: 16),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.person),
-            SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(paymentInfo.renterName, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('123 Đường ABC, Quận XYZ, TP.HCM'),
-                  Text('Thuê máy chủ trong 3 tháng'),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: _isPaid ? Colors.green : Colors.red,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(_isPaid ? 'Đã thanh toán' : 'Chưa thanh toán', style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        ),
-      ],
+    return _buildInfoBox('Mã Hợp Đồng:', widget.paymentInfo.contractCode);
+  }
+
+  Widget _buildDeviceInfo() {
+    return _buildInfoBox(
+      'Thông Tin Thiết Bị:',
+      'Tên thiết bị: ${widget.paymentInfo.deviceName}\nLoại thiết bị: ${widget.paymentInfo.deviceType}',
     );
   }
 
   Widget _buildAmountInfo() {
+    return _buildInfoBox('Số Tiền Thanh Toán:', '${widget.paymentInfo.amount} VND');
+  }
+
+  Widget _buildInfoBox(String title, String content) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Số Tiền Thanh Toán:', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 8),
         Container(
           width: double.infinity,
@@ -117,45 +89,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text('${paymentInfo.amount} VND'),
+          child: Text(content),
         ),
       ],
-    );
-  }
-
-  Widget _buildDeviceInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Thông Tin Thiết Bị:', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Tên thiết bị: ${paymentInfo.deviceName}'),
-              Text('Loại thiết bị: ${paymentInfo.deviceType}'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-    Widget _buildPaymentButton(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          _processPayment(context);
-        },
-        child: Text('Thanh Toán'),
-      ),
     );
   }
 
@@ -188,27 +124,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
           Icon(icon, size: 30),
           SizedBox(height: 8),
           Text(label),
-          if (_selectedPaymentMethod == label) Icon(Icons.check, color: Colors.blue),
+          if (_selectedPaymentMethod == label)
+            Icon(Icons.check_circle, color: Colors.green),
         ],
       ),
     );
   }
 
   Widget _buildBankTransferInfo() {
-    final BankTransferInfo transferInfo = BankTransferInfo(
-      bankName: 'Vietcombank',
-      accountNumber: '1234567890',
-      accountHolder: 'Công ty TNHH ABC',
-      qrCodeUrl: 'https://via.placeholder.com/150',
-      transferContent: 'Thanh toán hợp đồng ${paymentInfo.contractCode}',
-    );
-
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BankTransferScreen(transferInfo: transferInfo),
+            builder: (context) => BankTransferScreen(
+              transferInfo: BankTransferInfo(
+                bankName: 'Vietcombank',
+                accountNumber: '1234567890',
+                accountHolder: 'Công ty TNHH ABC',
+                qrCodeUrl: 'https://via.placeholder.com/150',
+                transferContent: 'Thanh toán hợp đồng ${widget.paymentInfo.contractCode}',
+              ),
+            ),
           ),
         );
       },
@@ -216,94 +153,55 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  void _processPayment(BuildContext context) {
-    if (_selectedPaymentMethod == 'Chuyển khoản') {
-      final BankTransferInfo transferInfo = BankTransferInfo(
-        bankName: 'Vietcombank',
-        accountNumber: '1234567890',
-        accountHolder: 'Công ty TNHH ABC',
-        qrCodeUrl: 'https://via.placeholder.com/150',
-        transferContent: 'Thanh toán hợp đồng ${paymentInfo.contractCode}',
-      );
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BankTransferScreen(transferInfo: transferInfo),
-        ),
-      );
-    } else if (_selectedPaymentMethod == 'Tiền mặt') {
-      setState(() {
-        _isPaid = true;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Thanh toán tiền mặt thành công!')));
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Xác nhận thanh toán'),
-            content: Text('Bạn có chắc chắn muốn thanh toán ${paymentInfo.amount} VND?'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Hủy'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Xác nhận'),
-                onPressed: () {
-                  setState(() {
-                    _isPaid = true;
-                  });
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Thanh toán thành công!')));
-                },
-              ),
-            ],
-          );
+  Widget _buildPaymentButton(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _isPaid = true;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Thanh toán thành công!')));
         },
-      );
-    }
+        child: Text('Thanh Toán'),
+      ),
+    );
   }
 
-  Widget _buildDueDate() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Ngày Đến Hạn:', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text('30/12/2023'), // Thay đổi ngày đến hạn theo yêu cầu
-        ),
+  // Tạo thanh điều hướng Bottom Navigation Bar
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
+        BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Danh mục'),
+        BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Hóa đơn'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Cài đặt'),
       ],
     );
   }
 
-  void _showNotificationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Thông báo'),
-          content: Text('Không có thông báo mới'),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  // Xử lý khi bấm vào BottomNavigationBar
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return; // Không làm gì nếu chọn lại cùng mục
+
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pop(context); // Quay về trang trước (hoặc điều hướng Home)
+        break;
+      case 1:
+        // Điều hướng đến Danh mục (nếu có)
+        break;
+      case 3:
+        // Điều hướng đến Cài đặt (nếu có)
+        break;
+    }
   }
 }
