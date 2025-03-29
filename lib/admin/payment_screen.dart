@@ -188,11 +188,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
           Icon(icon, size: 30),
           SizedBox(height: 8),
           Text(label),
-          if (_selectedPaymentMethod == label) Icon(Icons.check, color: Colors.blue),
+          if (_selectedPaymentMethod == label) 
+            Icon(Icons.check, color: Colors.blue),
         ],
       ),
     );
   }
+
 
   Widget _buildBankTransferInfo() {
     final BankTransferInfo transferInfo = BankTransferInfo(

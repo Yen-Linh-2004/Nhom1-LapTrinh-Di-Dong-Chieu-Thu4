@@ -1,36 +1,36 @@
-
-import 'package:code_baocao/Users/chitietthietbi.dart';
+import 'package:code_baocao/admin/chitietthietbi.dart';
 import 'package:flutter/material.dart';
 
-class EquipmentUserScreen extends StatefulWidget {
-  const EquipmentUserScreen({super.key});
+class EquipmentUserScreen1 extends StatefulWidget {
+  const EquipmentUserScreen1({super.key});
 
   @override
   _EquipmentUserScreenState createState() => _EquipmentUserScreenState();
 }
 
-class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
+class _EquipmentUserScreenState extends State<EquipmentUserScreen1> {
   final TextEditingController _searchController = TextEditingController();
   String _searchText = "";
+  int? _selectedIndex;
 
   List<Map<String, dynamic>> devices = [
     {
       "name": "Laptop Dell",
       "status": "Đang thuê",
-      "icon": Icons.laptop,
-      "color": Colors.orange,
+      "image": "assets/images/LaptopDELL_XPS.jpg",
+      "quantity": 5,
     },
     {
       "name": "Máy chiếu Epson",
       "status": "Đang thuê",
-      "icon": Icons.tv,
-      "color": Colors.blue,
+      "image": "assets/images/LaptopDELL_XPS.jpg",
+      "quantity": 2,
     },
     {
       "name": "Máy in Canon",
       "status": "Hết hạn",
-      "icon": Icons.print,
-      "color": Colors.red,
+      "image": "assets/images/LaptopDELL_XPS.jpg",
+      "quantity": 3,
     },
   ];
 
@@ -48,7 +48,6 @@ class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thanh tìm kiếm
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -65,41 +64,72 @@ class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
               },
             ),
             SizedBox(height: 16),
-
-            // Danh sách thiết bị
             Expanded(
-              child: ListView(
-                children:
-                    devices
-                        .where(
-                          (device) => device["name"].toLowerCase().contains(
-                            _searchText,
+              child: ListView.builder(
+                itemCount: devices.length,
+                itemBuilder: (context, index) {
+                  final device = devices[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DeviceDetailPage(),
                           ),
-                        )
-                        .map(
-                          (device) => _buildDeviceCard(
-                            context,
-                            device["name"],
-                            device["status"],
-                            device["icon"],
-                            device["color"],
-                          ),
-                        )
-                        .toList(),
+                        );
+                      },
+                      child: ListTile(
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Radio(
+                              value: index,
+                              groupValue: _selectedIndex,
+                              onChanged: (int? value) {
+                                setState(() {
+                                  _selectedIndex = value;
+                                });
+                              },
+                            ),
+                            Image.asset(
+                              device["image"],
+                              width: 200,
+                              height: 200,
+                            ),
+                          ],
+                        ),
+                        title: Text(
+                          device["name"],
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Trạng thái: ${device["status"]}"),
+                            Text("Số lượng: ${device["quantity"]}"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
-
-      // Nút thêm thiết bị và nhập thiết bị
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.extended(
             heroTag: "btnAdd",
             onPressed: () {
-              // Mở bottom sheet thêm thiết bị
               _showBottomSheet(context, "Thêm thiết bị");
             },
             icon: Icon(Icons.add),
@@ -110,7 +140,6 @@ class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
           FloatingActionButton.extended(
             heroTag: "btnImport",
             onPressed: () {
-              // Mở bottom sheet nhập thiết bị
               _showBottomSheet(context, "Nhập thiết bị");
             },
             icon: Icon(Icons.file_upload),
@@ -122,40 +151,6 @@ class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
     );
   }
 
-  Widget _buildDeviceCard(
-    BuildContext context,
-    String name,
-    String status,
-    IconData icon,
-    Color color,
-  ) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Icon(icon, color: color, size: 36),
-        title: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text("Trạng thái: $status"),
-        trailing: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor:
-                status == "Đang thuê" ? Colors.orange : Colors.blue,
-          ),
-          child: Text(status == "Đang thuê" ? "Trả thiết bị" : "Thuê lại"),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DeviceDetailPage()),
-          );
-        },
-      ),
-    );
-  }
-
-  // Hiển thị BottomSheet để thêm hoặc nhập thiết bị
   void _showBottomSheet(BuildContext context, String title) {
     showModalBottomSheet(
       context: context,
@@ -180,7 +175,10 @@ class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
                 decoration: InputDecoration(labelText: "Loại thiết bị"),
               ),
               SizedBox(height: 10),
-              TextField(decoration: InputDecoration(labelText: "Trạng thái")),
+              TextField(
+                decoration: InputDecoration(labelText: "Số lượng"),
+                keyboardType: TextInputType.number,
+              ),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

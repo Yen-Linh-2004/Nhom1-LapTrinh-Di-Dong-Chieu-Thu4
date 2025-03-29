@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hello, Yến Linh", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: Text("Hello, Yến Linh", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
             },
           ),
           CircleAvatar(
-            radius: 30, // Điều chỉnh kích thước ảnh đại diện
+            radius: 25, // Điều chỉnh kích thước ảnh đại diện
             backgroundImage: AssetImage('assets/images/image.png'),
             child: GestureDetector(
               onTap: () {
