@@ -2,8 +2,10 @@ import 'package:code_baocao/admin/chitiethopdong.dart';
 import 'package:code_baocao/admin/themhopdong.dart';
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class ContractListPage extends StatefulWidget {
   @override
+  // ignore: library_private_types_in_public_api
   _ContractListPageState createState() => _ContractListPageState();
 }
 

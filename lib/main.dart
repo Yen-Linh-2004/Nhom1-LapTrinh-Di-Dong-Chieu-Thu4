@@ -1,6 +1,7 @@
 
-import 'package:code_baocao/Users/user_main.dart';
+import 'package:code_baocao/admin/chatvsbaotri.dart';
 import 'package:flutter/material.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  MainScreen()
+      home:  MaintenanceScreen()
     );
   }
 }

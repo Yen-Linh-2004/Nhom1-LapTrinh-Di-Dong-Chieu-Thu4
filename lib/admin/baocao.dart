@@ -2,19 +2,12 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:fl_chart/fl_chart.dart';
 
-class MyApp1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MainScreen());
-  }
-}
-
-class MainScreen extends StatefulWidget {
+class MainScreen1 extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen1> {
   int _selectedIndex = 0;
 
   // Chuyển đổi giữa 2 màn hình

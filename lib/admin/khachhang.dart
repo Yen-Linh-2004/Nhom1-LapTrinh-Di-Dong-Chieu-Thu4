@@ -80,6 +80,7 @@ class CustomerListScreen extends StatelessWidget {
     );
   }
 
+  // ignore: unused_element
   Color _getMaintenanceColor(String? status) {
     switch (status) {
       case "Chưa xử lý":

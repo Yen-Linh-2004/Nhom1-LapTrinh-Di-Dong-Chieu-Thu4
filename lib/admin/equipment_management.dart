@@ -1,14 +1,17 @@
+// ignore_for_file: unused_field
+
 import 'package:code_baocao/admin/chitietthietbi.dart';
 import 'package:flutter/material.dart';
 
-class EquipmentUserScreen1 extends StatefulWidget {
-  const EquipmentUserScreen1({super.key});
+class EquipmentUserScreen extends StatefulWidget {
+  const EquipmentUserScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _EquipmentUserScreenState createState() => _EquipmentUserScreenState();
 }
 
-class _EquipmentUserScreenState extends State<EquipmentUserScreen1> {
+class _EquipmentUserScreenState extends State<EquipmentUserScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchText = "";
   int? _selectedIndex;
