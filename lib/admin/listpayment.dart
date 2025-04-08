@@ -1,6 +1,6 @@
+import 'package:code_baocao/admin/PaymentInfo.dart';
 import 'package:flutter/material.dart';
-import 'payment_screen.dart'; 
-import 'package:code_baocao/admin/payment_info.dart';
+import 'PaymentScreen.dart'; 
 
 class InvoiceListScreen extends StatefulWidget {
   @override
@@ -46,10 +46,10 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
   // Tạo AppBar
   AppBar _buildAppBar() {
     return AppBar(
-      title: Text('Danh Sách Hóa Đơn'),
+      title: Text('Danh Sách Hóa Đơn', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
       backgroundColor: Colors.blue,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: Icon(Icons.arrow_back, color: Colors.white,),
         onPressed: () {
           Navigator.pop(context);
         },

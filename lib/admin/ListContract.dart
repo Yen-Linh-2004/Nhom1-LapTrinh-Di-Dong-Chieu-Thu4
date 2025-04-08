@@ -1,5 +1,5 @@
-import 'package:code_baocao/admin/chitiethopdong.dart';
-import 'package:code_baocao/admin/themhopdong.dart';
+import 'package:code_baocao/admin/Detail_Contact.dart';
+import 'package:code_baocao/admin/Add_Contact.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -29,7 +29,17 @@ class _ContractListPageState extends State<ContractListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Danh sách hợp đồng"), backgroundColor: Colors.blueAccent),
+      appBar: AppBar(
+        title: const Text(
+          "Danh sách hợp đồng",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

@@ -71,15 +71,22 @@ class EmployeeListScreen extends StatelessWidget {
       "joinDate": "12/04/2020",
       "salary": "12,000,000 VNĐ",
       "shift": "Cả ngày (08:00 - 18:00)",
-    }
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Danh sách nhân viên"),
-        backgroundColor: Colors.blueAccent,
+        title: Text(
+          "Danh sách nhân viên",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: ListView.builder(
         itemCount: employees.length,

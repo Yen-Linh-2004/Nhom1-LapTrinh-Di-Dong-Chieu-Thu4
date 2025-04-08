@@ -1,4 +1,5 @@
-import 'package:code_baocao/Users/user_main.dart';
+import 'package:code_baocao/Users/ForgetPassword.dart';
+import 'package:code_baocao/Users/User_Main.dart';
 import 'package:flutter/material.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -45,13 +46,17 @@ class LoginPage extends StatelessWidget {
                 child: Text("Đăng nhập"),
                 style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
               ),
+              const SizedBox(height: 20,),
               TextButton(
-                onPressed: () {},
-                child: Text("Quên mật khẩu?", style: TextStyle(fontSize: 10),),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text("Chưa có tài khoản? Đăng ký"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordScreen(),
+                    ),
+                  );
+                },
+                child: Text("Quên mật khẩu?", style: TextStyle(fontSize: 18),),
               ),
             ],
           ),

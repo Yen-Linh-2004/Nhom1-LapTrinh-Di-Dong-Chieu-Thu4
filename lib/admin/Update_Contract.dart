@@ -34,16 +34,12 @@ class _UpdateContractPageState extends State<UpdateContractPage> {
   @override
   void initState() {
     super.initState();
-
-    // Khởi tạo các controller
     tenantController = TextEditingController(text: contract["tenantName"]);
     ownerController = TextEditingController(text: contract["ownerName"]);
     equipmentController = TextEditingController(text: contract["equipment"]);
     startDateController = TextEditingController(text: contract["startDate"]);
     endDateController = TextEditingController(text: contract["endDate"]);
     costController = TextEditingController(text: contract["cost"]);
-
-    // Gộp tất cả điều khoản vào một TextField
     allTermsController = TextEditingController(
       text: "${contract["warrantyTerms"]}\n"
           "${contract["paymentTerms"]}\n"
@@ -75,7 +71,6 @@ class _UpdateContractPageState extends State<UpdateContractPage> {
         contract["endDate"] = endDateController.text;
         contract["cost"] = costController.text;
 
-        // Chia lại các điều khoản từ TextField duy nhất
         List<String> terms = allTermsController.text.split("\n");
         if (terms.length >= 5) {
           contract["warrantyTerms"] = terms[0];
@@ -95,44 +90,58 @@ class _UpdateContractPageState extends State<UpdateContractPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF4F6F8),
       appBar: AppBar(
-        title: Text("Cập nhật hợp đồng"),
-        backgroundColor: Colors.blueAccent,
+        title: Text("Cập nhật hợp đồng", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white,),
+        onPressed: () => Navigator.pop(context),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
           child: Card(
+            elevation: 8,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
-            elevation: 5,
             child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    _buildTextField("Mã hợp đồng", contract['contractId']!, enabled: false),
-                    _buildTextField("Đơn vị thuê", tenantController),
-                    _buildTextField("Chủ hợp đồng", ownerController),
-                    _buildTextField("Thiết bị thuê", equipmentController),
-                    _buildTextField("Ngày bắt đầu", startDateController),
-                    _buildTextField("Ngày kết thúc", endDateController),
-                    _buildTextField("Chi phí", costController, isMoney: true),
-                    _buildMultilineTextField("Điều khoản hợp đồng", allTermsController),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionTitle("Thông tin chung"),
+                  _buildTextField("Mã hợp đồng", contract['contractId']!, enabled: false),
+                  _buildTextField("Đơn vị thuê", tenantController),
+                  _buildTextField("Chủ hợp đồng", ownerController),
+                  _buildTextField("Thiết bị thuê", equipmentController),
+                  _buildTextField("Ngày bắt đầu", startDateController),
+                  _buildTextField("Ngày kết thúc", endDateController),
+                  _buildTextField("Chi phí", costController, isMoney: true),
 
-                    SizedBox(height: 20),
-                    ElevatedButton.icon(
+                  SizedBox(height: 16),
+                  _sectionTitle("Điều khoản"),
+                  _buildMultilineTextField("Điều khoản hợp đồng", allTermsController),
+
+                  SizedBox(height: 30),
+                  Center(
+                    child: ElevatedButton.icon(
                       onPressed: saveContract,
-                      icon: Icon(Icons.save),
-                      label: Text("Lưu thông tin"),
+                      icon: Icon(Icons.save_alt, color: Colors.white),
+                      label: Text("Lưu hợp đồng", style: TextStyle(fontSize: 16, color: Colors.white)),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        backgroundColor: Colors.blue,
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           ),
@@ -141,17 +150,33 @@ class _UpdateContractPageState extends State<UpdateContractPage> {
     );
   }
 
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+        ),
+      ),
+    );
+  }
+
   Widget _buildMultilineTextField(String label, TextEditingController controller) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.0),
+      padding: EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         controller: controller,
-        maxLines: null, // Không giới hạn số dòng
+        maxLines: null,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          filled: true,
+          fillColor: Colors.grey[100],
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          contentPadding: EdgeInsets.all(14),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -163,22 +188,20 @@ class _UpdateContractPageState extends State<UpdateContractPage> {
     );
   }
 
-  Widget _buildTextField(
-    String label,
-    dynamic controller, {
-    bool enabled = true,
-    bool isMoney = false,
-  }) {
+  Widget _buildTextField(String label, dynamic controller,
+      {bool enabled = true, bool isMoney = false}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.0),
+      padding: EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         controller: controller is TextEditingController ? controller : null,
         enabled: enabled,
         keyboardType: isMoney ? TextInputType.number : TextInputType.text,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          filled: true,
+          fillColor: enabled ? Colors.grey[100] : Colors.grey[200],
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          contentPadding: EdgeInsets.all(14),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {

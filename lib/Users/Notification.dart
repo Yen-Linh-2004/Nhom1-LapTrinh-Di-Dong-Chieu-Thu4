@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MaintenanceRequestsScreen extends StatefulWidget {
-  const MaintenanceRequestsScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _MaintenanceRequestsScreenState createState() => _MaintenanceRequestsScreenState();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _MaintenanceRequestsScreenState extends State<MaintenanceRequestsScreen> {
+class _NotificationScreenState extends State<NotificationScreen> {
   List<Map<String, dynamic>> requests = [
     {
       'device': 'Laptop Dell',

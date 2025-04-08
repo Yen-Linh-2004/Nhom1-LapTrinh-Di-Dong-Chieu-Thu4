@@ -44,8 +44,15 @@ class _AddContractPageState extends State<AddContractPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thêm Hợp Đồng"),
-        backgroundColor: Colors.blueAccent,
+        title: Text(
+          "Thêm Hợp Đồng",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -68,10 +75,7 @@ class _AddContractPageState extends State<AddContractPage> {
                     _buildTextField("Ngày bắt đầu", startDateController),
                     _buildTextField("Ngày kết thúc", endDateController),
                     _buildTextField("Chi phí", costController, isMoney: true),
-                    _buildTextField(
-                      "Bảo hành",
-                      warrantyController,
-                    ),
+                    _buildTextField("Bảo hành", warrantyController),
                     _buildTextField1(
                       "Điều khoản thanh toán",
                       paymentTermsController,

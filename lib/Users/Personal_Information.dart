@@ -1,4 +1,4 @@
-import 'package:code_baocao/Users/capnhanthongtin.dart';
+import 'package:code_baocao/Users/Update_Information.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {

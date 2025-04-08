@@ -1,5 +1,7 @@
-import 'package:code_baocao/admin/capnhathopdong.dart';
 import 'package:flutter/material.dart';
+import 'package:code_baocao/admin/Update_Contract.dart';
+import 'package:code_baocao/admin/PaymentInfo.dart';
+import 'package:code_baocao/admin/PaymentScreen.dart';
 
 class ContractDetailPage extends StatelessWidget {
   final Map<String, String> contract = {
@@ -10,19 +12,38 @@ class ContractDetailPage extends StatelessWidget {
     "startDate": "01/03/2025",
     "endDate": "01/09/2025",
     "cost": "10,000,000 VNĐ",
-    "warrantyTerms": "  - Bảo hành 6 tháng, không áp dụng nếu lỗi do người dùng.",
+    "warrantyTerms":
+        "  - Bảo hành 6 tháng, không áp dụng nếu lỗi do người dùng.",
     "paymentTerms": "  - Thanh toán trước 50%, phần còn lại sau khi lắp đặt.",
-    "contractTermination": "  - Chấm dứt hợp đồng phải thông báo trước 30 ngày.",
-    "maintenanceSchedule":"  - Bảo trì mỗi 3 tháng, khách hàng chịu chi phí bảo trì.",
+    "contractTermination":
+        "  - Chấm dứt hợp đồng phải thông báo trước 30 ngày.",
+    "maintenanceSchedule":
+        "  - Bảo trì mỗi 3 tháng, khách hàng chịu chi phí bảo trì.",
     "lateFeePolicy": "  - Phạt 5% nếu thanh toán chậm quá 7 ngày.",
   };
+
+  // Tạo đối tượng PaymentInfo ví dụ
+  PaymentInfo paymentInfo = PaymentInfo(
+    contractCode: 'HD001',
+    deviceName: 'Máy chiếu Epson',
+    deviceType: 'Máy chiếu',
+    amount: 1000000.0,
+    renterName: '', // Số tiền thanh toán
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chi tiết hợp đồng"),
-        backgroundColor: Colors.blueAccent,
+        title: Text(
+          "Chi tiết hợp đồng",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -82,10 +103,7 @@ class ContractDetailPage extends StatelessWidget {
                     subtitle: Text(contract['startDate']!),
                   ),
                   ListTile(
-                    leading: Icon(
-                      Icons.calendar_today,
-                      color: Colors.redAccent,
-                    ),
+                    leading: Icon(Icons.calendar_today, color: Colors.blue),
                     title: Text(
                       "Thời gian kết thúc",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -93,21 +111,84 @@ class ContractDetailPage extends StatelessWidget {
                     subtitle: Text(contract['endDate']!),
                   ),
                   Divider(),
+
                   ListTile(
-                    leading: Icon(Icons.attach_money, color: Colors.green),
-                    title: Text(
-                      "Chi phí",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.red,
+                    leading: Icon(Icons.attach_money, color: Colors.blue),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Chi phí",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                contract['cost']!,
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          // Nút Thanh toán
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0, right: 1),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder:
+                                //         (context) => PaymentScreen(
+                                //           paymentInfo: paymentInfo,
+                                //         ),
+                                //   ),
+                                // );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
+                                ),
+                                backgroundColor: Colors.lightGreen,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
+                                  ), // Bo tròn các góc
+                                ),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => PaymentScreen(
+                                            paymentInfo: paymentInfo,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Thanh toán",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    subtitle: Text(
-                      contract['cost']!,
-                      style: TextStyle(fontSize: 16),
-                    ),
                   ),
+                  SizedBox(height: 10),
                   Divider(),
                   ListTile(
                     leading: Icon(Icons.security, color: Colors.blueAccent),
@@ -120,7 +201,7 @@ class ContractDetailPage extends StatelessWidget {
                       children: [
                         Text("${contract['warrantyTerms']}"),
                         Text("${contract['paymentTerms']}"),
-                        Text("${contract['contractTermination']}", ),
+                        Text("${contract['contractTermination']}"),
                         Text("${contract['maintenanceSchedule']}"),
                         Text("${contract['lateFeePolicy']}"),
                       ],

@@ -1,4 +1,4 @@
-import 'package:code_baocao/Users/chitiethopdong.dart';
+import 'package:code_baocao/Users/Detail_Contract.dart';
 import 'package:flutter/material.dart';
 
 class ContractsScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class ContractsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Danh sách các hợp đồng:", 
+          Text("Danh sách hợp đồng:", 
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 10), // Thêm khoảng cách giữa tiêu đề và danh sách
           Expanded(

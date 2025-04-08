@@ -38,18 +38,6 @@ class HomeScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 20),
-            // Định hướng đội nhóm
-            _buildSectionTitle("Định Hướng Đội Nhóm"),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15), // Bo góc 15px
-              child: Image.asset(
-                "assets/images/banner_dinhhuong.jpg",
-                width: 800,
-                height: 250,
-                fit: BoxFit.cover,
-              ),
-            ),
           ],
         ),
       ),

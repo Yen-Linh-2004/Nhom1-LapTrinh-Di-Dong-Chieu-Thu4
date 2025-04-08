@@ -1,175 +1,228 @@
-import 'package:code_baocao/Users/thongtincanhan.dart';
-import 'package:code_baocao/admin/baocao.dart';
-import 'package:code_baocao/admin/baotri.dart';
-import 'package:code_baocao/admin/equipment_management.dart';
-import 'package:code_baocao/admin/hopdong.dart';
+import 'package:code_baocao/admin/ListContract.dart';
+import 'package:code_baocao/admin/ListCustomer.dart';
+import 'package:code_baocao/admin/ListDevice.dart';
+import 'package:code_baocao/admin/ListStaff.dart';
+import 'package:code_baocao/admin/ListSupplier.dart';
+import 'package:code_baocao/admin/Maintenance.dart';
+import 'package:code_baocao/admin/Notification.dart';
+import 'package:code_baocao/admin/Report.dart';
+import 'package:code_baocao/admin/Setting.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class DashboardPage extends StatelessWidget {
+class AdminHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(220), // Chiều cao AppBar
-        child: Stack(
-          children: [
-            // Ảnh nền
-            Container(
-              height: 250,
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Colors.orange,
+          elevation: 0,
+          title: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.only(top: 30, bottom: 10),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              width: 450,
               decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.search, color: Colors.grey),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(fontSize: 14),
+                      decoration: InputDecoration(
+                        hintText: "Tìm kiếm chức năng...",
+                        border: InputBorder.none,
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(16),
+              height: 230,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage(
-                    "assets/images/banner_appbar_admin.jpg",
-                  ), // Thay đường dẫn ảnh phù hợp
+                  image: AssetImage("assets/images/banner_appbar_admin.jpg"),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            // Tiêu đề (Căn góc trên trái)
-            Positioned(
-              top: 10, // Căn trên
-              left: 16, // Căn trái
-              child: Text(
-                "Xin chào, Admin!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white, // Đổi màu để dễ nhìn trên nền ảnh
-                ),
-              ),
-            ),
-            // Các icon góc trên phải
-            Positioned(
-              top: 10, // Căn trên
-              right: 16, // Căn phải
-              child: Row(
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                physics: NeverScrollableScrollPhysics(),
                 children: [
-                  IconButton(
-                    icon: Icon(LucideIcons.bell, color: Colors.white),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(),
-                        ), // Thay bằng trang cần chuyển đến
-                      );
-                    },
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(LucideIcons.user),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      // Body đè lên AppBar một chút
-      body: Transform.translate(
-        offset: Offset(0, -20), // Đẩy lên 20px
-        child: Container(
-          padding: EdgeInsets.only(top: 35, left: 16, right: 16),
-          decoration: BoxDecoration(
-            color: Colors.white, // Nếu cần màu nền
-            boxShadow: [
-              BoxShadow(color: Colors.black12, blurRadius: 8, spreadRadius: 2),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Các chức năng chính:",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.search, color: Colors.green),
-                      Text("Tìm kiếm", style: TextStyle(color: Colors.green)),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              // Chức năng chính
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildFeatureCard(
+                  _buildFunctionItem(context, "Thiết bị", LucideIcons.monitor,
+                      Colors.blue, EquipmentUserScreen()),
+                  _buildFunctionItem(context, "Hợp đồng", LucideIcons.fileText,
+                      Colors.green, ContractListPage()),
+                  _buildFunctionItem(
                       context,
-                      "Quản lý thiết bị",
-                      LucideIcons.list,
+                      "Bảo trì",
+                      LucideIcons.calendarClock,
                       Colors.orange,
-                      EquipmentUserScreen(),
-                    ),
-                    _buildFeatureCard(
-                      context,
-                      "Quản lý hợp đồng",
-                      LucideIcons.fileText,
-                      Colors.blue,
-                      ContractListPage(),
-                    ),
-                    _buildFeatureCard(
-                      context,
-                      "quản lý bảo trì",
-                      LucideIcons.calendar,
-                      Colors.red,
-                      MaintenanceScreen(),
-                    ),
-                    _buildFeatureCard(
-                      context,
-                      "Báo cáo thống kê",
-                      LucideIcons.barChart,
-                      Colors.purple,
-                      MainScreen1(),
-                    ),
-                    // _buildFeatureCard(
-                    //   context,
-                    //   "Cài đặt hệ thống",
-                    //   LucideIcons.settings,
-                    //   Colors.grey,
-                    // ),
-                  ],
-                ),
+                      MaintenanceFlowScreen()),
+                  _buildFunctionItem(context, "Báo cáo", LucideIcons.barChart2,
+                      Colors.red, MainScreen1()),
+                  _buildFunctionItem(context, "Nhân viên", LucideIcons.star,
+                      Colors.purple, EmployeeListScreen()),
+                  _buildFunctionItem(context, "Khách hàng",
+                      LucideIcons.briefcase, Colors.teal, CustomerListScreen()),
+                  _buildFunctionItem(context, "Nhà cung cấp",
+                      LucideIcons.factory, Colors.indigo, SupplierListScreen()),
+                ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Chức năng gần đây",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 120,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  _buildRecentCard("Bảo trì", Icons.build, Colors.orange),
+                  _buildRecentCard("Hợp đồng", Icons.article, Colors.blue),
+                  _buildRecentCard("Thiết bị", Icons.devices, Colors.green),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildFeatureCard(
-    BuildContext context,
-    String title,
-    IconData icon,
-    Color color,
-    Widget page,
-  ) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: Icon(icon, color: color, size: 30),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Icon(Icons.arrow_forward_ios, size: 18),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => page),
-          );
-        },
+  Widget _buildFunctionItem(BuildContext context, String title, IconData icon,
+      Color color, Widget nextPage) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => nextPage),
+        );
+      },
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: color.withOpacity(0.1),
+            child: Icon(icon, color: color),
+          ),
+          SizedBox(height: 6),
+          Text(
+            title,
+            style: TextStyle(fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentCard(String title, IconData icon, Color color) {
+    return Container(
+      width: 160,
+      margin: EdgeInsets.only(right: 12),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 28, color: color),
+          SizedBox(height: 12),
+          Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 4),
+          Text(
+            "Truy cập gần đây",
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AdminMainPage extends StatefulWidget {
+  @override
+  _AdminMainPageState createState() => _AdminMainPageState();
+}
+
+class _AdminMainPageState extends State<AdminMainPage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    AdminHomePage(), // Trang chủ
+    AdminNotificationPage(), // Thông báo
+    SettingsPage(), // Cài đặt
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: "Trang chủ",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: "Thông báo",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: "Cài đặt",
+          ),
+        ],
       ),
     );
   }

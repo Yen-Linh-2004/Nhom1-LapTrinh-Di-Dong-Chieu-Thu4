@@ -32,6 +32,9 @@ dependencies:
     sdk: flutter
   google_fonts: ^6.1.0
   lucide_icons: ^0.257.0
+  eva_icons_flutter: ^3.1.0 
+  font_awesome_flutter: ^10.0.0
+  qr_flutter: ^4.0.0
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -86,4 +89,6 @@ flutter:
     - assets/images/logo_AnLacPhat.jpg
     - assets/images/logo_HandyGoods.jpg
     - assets/images/Logo_MinhHieu.jpg
+    # Hình ảnh chatbox
+    - assets/images/hinh_chatbox.jpg
     
